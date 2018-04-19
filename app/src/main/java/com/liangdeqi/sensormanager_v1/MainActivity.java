@@ -1,175 +1,112 @@
 package com.liangdeqi.sensormanager_v1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+import org.litepal.LitePal;
+import org.litepal.tablemanager.Connector;
 
-    private SensorManager mSensorManager;
-    private TextView mTxtValue1;
-    private TextView mTxtValue2;
-    private TextView mTxtValue3;
-    private TextView mTxtValue4;
-    private TextView mTxtValue5;
-    private TextView mTxtValue6;
-    private TextView mTxtValue7;
-    private TextView mTxtValue8;
-    private TextView mTxtValue9;
+public class MainActivity extends BaseActivity implements View.OnClickListener {
+
+
+    
+    private Button mBtn1;
+    private Button mBtn2;
+    private Button mBtn3;
+    private Button mBtn4;
+    private Button mBtn5;
+    private Button mBtn6;
+    private Button mBtn7;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTxtValue1 = (TextView) findViewById(R.id.txt_value1);
-        mTxtValue2 = (TextView) findViewById(R.id.txt_value2);
-        mTxtValue3 = (TextView) findViewById(R.id.txt_value3);
-        mTxtValue4 = (TextView) findViewById(R.id.txt_value4);
-        mTxtValue5 = (TextView) findViewById(R.id.txt_value5);
-        mTxtValue6 = (TextView) findViewById(R.id.txt_value6);
-        mTxtValue7 = (TextView) findViewById(R.id.txt_value7);
-        mTxtValue8 = (TextView) findViewById(R.id.txt_value8);
-        mTxtValue9 = (TextView) findViewById(R.id.txt_value9);
+        //为九个按钮注册监听
+        mBtn1 = (Button) findViewById(R.id.btn1);  mBtn1.setOnClickListener(this);
+        mBtn2 = (Button) findViewById(R.id.btn2);  mBtn2.setOnClickListener(this);
+        mBtn3 = (Button) findViewById(R.id.btn3);  mBtn3.setOnClickListener(this);
+        mBtn4 = (Button) findViewById(R.id.btn4);  mBtn4.setOnClickListener(this);
+        mBtn5 = (Button) findViewById(R.id.btn5);  mBtn5.setOnClickListener(this);
+        mBtn6 = (Button) findViewById(R.id.btn6);  mBtn6.setOnClickListener(this);
+        mBtn7 = (Button) findViewById(R.id.btn7);  mBtn7.setOnClickListener(this);
 
-        // 获取传感器管理对象
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Connector.getDatabase();
+//        SensorValues sv = new SensorValues();
+//        sv.setSensorType(0);
+//        sv.setValue1(0);
+//        sv.setValue2(0);
+//        sv.setValue3(0);
+        
+    }
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.btn1:
+                Intent intent1 = new Intent(MainActivity.this,AccelerometerActivity.class);
+                startActivity(intent1);
+                SensorValues sv = new SensorValues();
+                sv.setSensorType(0);
+                sv.setValue1(0);
+                sv.setValue2(0);
+                sv.setValue3(0);
+                break;
+            case R.id.btn2:
+                Intent intent2 = new Intent(MainActivity.this,OrientationActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.btn3:
+                Intent intent3 = new Intent(MainActivity.this,GyroscopeActivity.class);
+                startActivity(intent3);
+                break;
+            case R.id.btn4:
+                Intent intent4 = new Intent(MainActivity.this,MagneticFieldActivity.class);
+                startActivity(intent4);
+                break;
+            case R.id.btn5:
+                Intent intent5 = new Intent(MainActivity.this,GravityActivity.class);
+                startActivity(intent5);
+                break;
+            case R.id.btn6:
+                Intent intent6 = new Intent(MainActivity.this,LinearAccelerometerActivity.class);
+                startActivity(intent6);
+                break;
+            case R.id.btn7:
+                Intent intent7 = new Intent(MainActivity.this,AtLPActivity.class);
+                startActivity(intent7);
+                break;
+
+          default:
+              break;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // 为加速度传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        // 为方向传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
-        // 为陀螺仪传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
-        // 为磁场传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
-        // 为重力传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_GAME);
-        // 为线性加速度传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION), SensorManager.SENSOR_DELAY_GAME);
-        // 为温度传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_GAME);
-        // 为光传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT), SensorManager.SENSOR_DELAY_GAME);
-        // 为压力传感器注册监听器
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_GAME);
+        
     }
     @Override
     protected void onStop() {
         super.onStop();
-        // 取消监听
-        mSensorManager.unregisterListener(this);
+      
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        float[] values = event.values;
-        // 获取传感器类型
-        int type = event.sensor.getType();
-        StringBuilder sb;
-        switch (type){
-            case Sensor.TYPE_ACCELEROMETER:
-                sb = new StringBuilder();
-                sb.append("加速度传感器返回数据：");
-                sb.append("\nX方向的加速度：");
-                sb.append(values[0]);
-                sb.append("\nY方向的加速度：");
-                sb.append(values[1]);
-                sb.append("\nZ方向的加速度：");
-                sb.append(values[2]);
-                mTxtValue1.setText(sb.toString());
-                break;
-            case Sensor.TYPE_ORIENTATION:
-                sb = new StringBuilder();
-                sb.append("\n方向传感器返回数据：");
-                sb.append("\n绕Z轴转过的角度：");
-                sb.append(values[0]);
-                sb.append("\n绕X轴转过的角度：");
-                sb.append(values[1]);
-                sb.append("\n绕Y轴转过的角度：");
-                sb.append(values[2]);
-                mTxtValue2.setText(sb.toString());
-                break;
-            case Sensor.TYPE_GYROSCOPE:
-                sb = new StringBuilder();
-                sb.append("\n陀螺仪传感器返回数据：");
-                sb.append("\n绕X轴旋转的角速度：");
-                sb.append(values[0]);
-                sb.append("\n绕Y轴旋转的角速度：");
-                sb.append(values[1]);
-                sb.append("\n绕Z轴旋转的角速度：");
-                sb.append(values[2]);
-                mTxtValue3.setText(sb.toString());
-                break;
-            case Sensor.TYPE_MAGNETIC_FIELD:
-                sb = new StringBuilder();
-                sb.append("\n磁场传感器返回数据：");
-                sb.append("\nX轴方向上的磁场强度：");
-                sb.append(values[0]);
-                sb.append("\nY轴方向上的磁场强度：");
-                sb.append(values[1]);
-                sb.append("\nZ轴方向上的磁场强度：");
-                sb.append(values[2]);
-                mTxtValue4.setText(sb.toString());
-                break;
-            case Sensor.TYPE_GRAVITY:
-                sb = new StringBuilder();
-                sb.append("\n重力传感器返回数据：");
-                sb.append("\nX轴方向上的重力：");
-                sb.append(values[0]);
-                sb.append("\nY轴方向上的重力：");
-                sb.append(values[1]);
-                sb.append("\nZ轴方向上的重力：");
-                sb.append(values[2]);
-                mTxtValue5.setText(sb.toString());
-                break;
-            case Sensor.TYPE_LINEAR_ACCELERATION:
-                sb = new StringBuilder();
-                sb.append("\n线性加速度传感器返回数据：");
-                sb.append("\nX轴方向上的线性加速度：");
-                sb.append(values[0]);
-                sb.append("\nY轴方向上的线性加速度：");
-                sb.append(values[1]);
-                sb.append("\nZ轴方向上的线性加速度：");
-                sb.append(values[2]);
-                mTxtValue6.setText(sb.toString());
-                break;
-            case Sensor.TYPE_AMBIENT_TEMPERATURE:
-                sb = new StringBuilder();
-                sb.append("\n温度传感器返回数据：");
-                sb.append("\n当前温度为：");
-                sb.append(values[0]);
-                mTxtValue7.setText(sb.toString());
-                break;
-            case Sensor.TYPE_LIGHT:
-                sb = new StringBuilder();
-                sb.append("\n光传感器返回数据：");
-                sb.append("\n当前光的强度为：");
-                sb.append(values[0]);
-                mTxtValue8.setText(sb.toString());
-                break;
-            case Sensor.TYPE_PRESSURE:
-                sb = new StringBuilder();
-                sb.append("\n压力传感器返回数据：");
-                sb.append("\n当前压力为：");
-                sb.append(values[0]);
-                mTxtValue9.setText(sb.toString());
-                break;
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
+ 
 
 
 }
